@@ -3,6 +3,10 @@ from skrf.vi import vna
 from serial.tools import list_ports
 import numpy as np
 
+'''
+A minimal calibration file based on the original collect_calib.py.
+'''
+
 VIDPIDs = set([(0x0483, 0x5740), (0x04b4,0x0008)]);
 
 # Get nanovna device automatically
@@ -30,6 +34,8 @@ for name in ['open','short','match','thru']:
     for i in range(4):
         num = int(1 + (f_stop[i] - f_start[i]) / f_step)
         nanovna.set_frequency_sweep(f_start[i], f_stop[i], num)
+        # TODO: Original file had ports=(0, 1), but the docs say options are 1, 2, or None. It still times out with ports=(1, 2). 
+        # See: https://scikit-rf.readthedocs.io/en/latest/api/vi/generated/skrf.vi.vna.nanovna.NanoVNAv2.get_snp_network.html#skrf.vi.vna.nanovna.NanoVNAv2.get_snp_network
         nw_raw = nanovna.get_snp_network(ports=(0, 1))
         s.append(nw_raw.s)
     s = np.concatenate(s)
