@@ -3,6 +3,10 @@ from skrf.vi import vna
 from serial.tools import list_ports
 import numpy as np
 
+'''
+A minimal calibration file based on the original collect_calib.py.
+'''
+
 VIDPIDs = set([(0x0483, 0x5740), (0x04b4,0x0008)]);
 
 # Get nanovna device automatically

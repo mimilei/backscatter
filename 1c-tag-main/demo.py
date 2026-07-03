@@ -10,6 +10,10 @@ from tqdm import tqdm
 import joblib
 import threading
 
+"""
+Modified version of Daehwa's demo.py. Both gives demos and records data. 
+"""
+
 class dotdict(dict):
     """dot.notation access to dictionary attributes"""
     __getattr__ = dict.get
@@ -71,7 +75,8 @@ class VNAObject():
         # name = ["dipole-small"]
         # name = ["litevna_vivaldi"]
         # name = ["litevna+rfswitch-ch1","litevna+rfswitch-ch2"]
-        name = ["litevna+amp+rfswitch-ch1","litevna+amp+rfswitch-ch2"]
+        # name = ["litevna+amp+rfswitch-ch1","litevna+amp+rfswitch-ch2"]
+        name = ["calib_20260403"]  # TODO: Make sure to update name
 
         cal = []
         for i in range(len(name)):
