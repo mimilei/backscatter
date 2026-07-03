@@ -16,7 +16,6 @@ def getport() -> str:
             return device.device
     raise OSError("device not found")
 
-
 # connect to NanoVNA on /dev/ttyACM0 (Linux)
 # nanovna = skrf.vi.vna.NanoVNAv2('ASRL/dev/ttyACM0::INSTR')
 

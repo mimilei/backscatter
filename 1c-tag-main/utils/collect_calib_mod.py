@@ -34,8 +34,6 @@ for name in ['open','short','match','thru']:
     for i in range(4):
         num = int(1 + (f_stop[i] - f_start[i]) / f_step)
         nanovna.set_frequency_sweep(f_start[i], f_stop[i], num)
-        # TODO: Original file had ports=(0, 1), but the docs say options are 1, 2, or None. It still times out with ports=(1, 2). 
-        # See: https://scikit-rf.readthedocs.io/en/latest/api/vi/generated/skrf.vi.vna.nanovna.NanoVNAv2.get_snp_network.html#skrf.vi.vna.nanovna.NanoVNAv2.get_snp_network
         nw_raw = nanovna.get_snp_network(ports=(0, 1))
         s.append(nw_raw.s)
     s = np.concatenate(s)

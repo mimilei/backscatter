@@ -8,17 +8,17 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/Users/michang/Documents/research/1c-tag-main/rfid_venv"
+setenv VIRTUAL_ENV /Users/michang/Documents/research/backscatter/1c-tag-main/rfid_venv
 
 set _OLD_VIRTUAL_PATH="$PATH"
-setenv PATH "$VIRTUAL_ENV/bin:$PATH"
+setenv PATH "$VIRTUAL_ENV/"bin":$PATH"
 
 
 set _OLD_VIRTUAL_PROMPT="$prompt"
 
 if (! "$?VIRTUAL_ENV_DISABLE_PROMPT") then
-    set prompt = "(rfid_venv) $prompt"
-    setenv VIRTUAL_ENV_PROMPT "(rfid_venv) "
+    set prompt = '(rfid_venv) '"$prompt"
+    setenv VIRTUAL_ENV_PROMPT '(rfid_venv) '
 endif
 
 alias pydoc python -m pydoc

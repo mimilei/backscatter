@@ -1,4 +1,4 @@
-#!/Users/michang/Documents/research/1c-tag-main/rfid_venv/bin/python
+#!/Users/michang/Documents/research/backscatter/1c-tag-main/rfid_venv/bin/python3.10
 import sys
 from serial.tools.miniterm import main
 if __name__ == '__main__':
