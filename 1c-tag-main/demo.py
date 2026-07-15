@@ -76,7 +76,7 @@ class VNAObject():
         # name = ["litevna_vivaldi"]
         # name = ["litevna+rfswitch-ch1","litevna+rfswitch-ch2"]
         # name = ["litevna+amp+rfswitch-ch1","litevna+amp+rfswitch-ch2"]
-        name = ["calib_20260403"]  # TODO: Make sure to update name
+        name = ["calib_20260708_1232"]  # TODO: Make sure to update name
 
         cal = []
         for i in range(len(name)):

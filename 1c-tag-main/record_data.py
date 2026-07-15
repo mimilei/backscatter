@@ -13,6 +13,10 @@ import os
 
 """
 For recording training and analysis data.
+Use for all meader tests and data collection.
+(Last updated: 2026-07-08)
+
+MAKE SURE TO ALWAYS UPDATE THE FOLDER NAME IN set_calibration()!
 
 Example: 
     python record_data.py -S 0.5e9 -E 2.5e9 -N 101 --plot --out_dir data/20260423_nacl
@@ -81,7 +85,7 @@ class VNAObject():
         # name = ["litevna_vivaldi"]
         # name = ["litevna+rfswitch-ch1","litevna+rfswitch-ch2"]
         # name = ["litevna+amp+rfswitch-ch1","litevna+amp+rfswitch-ch2"]
-        name = ["calib_20260423"]  # TODO: Make sure to update name every time!!
+        name = ["calib_20260708_1232"]  # TODO: Make sure to update name every time!!
 
         cal = []
         for i in range(len(name)):
@@ -150,6 +154,7 @@ class VNAStream():
             # self.ser_switch = serial.Serial('/dev/cu.usbmodem1101', 9600, timeout=1)
             # self.ser_switch = serial.Serial('/dev/cu.usbmodem11401', 9600, timeout=1)
             self.ser_switch = serial.Serial('/dev/cu.usbmodem1401', 9600, timeout=1)
+            # self.ser_switch = serial.Serial('/dev/cu.usbmodemDEMO1', 9600, timeout=1)
             print("=====> RF Switcher connected")
         except Exception as e:
             self.ser_switch = None

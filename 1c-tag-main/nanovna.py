@@ -332,7 +332,7 @@ class NanoVNAV2(NanoVNA):
 
     def open(self):
         if self.serial is None:
-            self.serial = serial.Serial(self.dev)
+            self.serial = serial.Serial(self.dev, baudrate=38400)
         tty.setraw(self.serial.fd)
         self.serial.timeout = 3
 

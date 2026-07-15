@@ -1,7 +1,6 @@
-#!/Users/michang/Documents/research/backscatter/1c-tag-main/rfid_venv/bin/python3.10
+#!/Users/michang/Documents/research/microfluidic_rf/code/backscatter/1c-tag-main/rfid_venv/bin/python
 import sys
 from pyvisa.cmd_line_tools import visa_shell
 if __name__ == '__main__':
-    if sys.argv[0].endswith('.exe'):
-        sys.argv[0] = sys.argv[0][:-4]
+    sys.argv[0] = sys.argv[0].removesuffix('.exe')
     sys.exit(visa_shell())

@@ -21,6 +21,7 @@ def getport() -> str:
 
 # connect to NanoVNA on /dev/cu.usbmodemDEMO1 (MacOS)
 nanovna = skrf.vi.vna.NanoVNAv2('ASRL'+getport())
+nanovna.resource.baud_rate = 38400
 
 # for Windows users: ASRL1 for COM1
 # nanovna = skrf.vi.vna.NanoVNAv2('ASRL1::INSTR')

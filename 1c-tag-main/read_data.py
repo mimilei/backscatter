@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
+from sklearn.covariance import LedoitWolf
 
 def phase(x):
     ymax, ymin = 4, -4
@@ -14,7 +15,21 @@ def phase(x):
     return a
 
 def logmag(x):
-    return 20*np.log10(np.abs(x))
+    # Clamp away from exact zero: a zero-magnitude reading (dropped sample/glitch)
+    # would otherwise produce -inf and crash any downstream finite-value check
+    # (e.g. sklearn's Mahalanobis validation), rather than a very-low-but-finite dB value.
+    return 20*np.log10(np.maximum(np.abs(x), 1e-12))
+
+def phase_components(x):
+    """Wraparound-safe phase representation: (cos, sin) of the complex angle.
+
+    Raw phase in degrees jumps discontinuously across the +-180 degree boundary, which
+    would inject spurious spikes into subtract_moving_average(). cos/sin are bounded in
+    [-1, 1] with no discontinuity, so they compose safely with the same moving-average
+    filter used for magnitude.
+    """
+    angle = np.angle(x)
+    return np.cos(angle), np.sin(angle)
 
 def subtract_moving_average(arr, window_size=11):
     """
@@ -28,6 +43,48 @@ def subtract_moving_average(arr, window_size=11):
         window = arr[:,i-window_size:i]
         window = np.mean(window, axis=1)
         filtered.append(dat-window)
+    filtered = np.array(filtered).T
+    return filtered
+
+def fit_covariance_reference(features):
+    """Fit a shrinkage-regularized (Ledoit-Wolf) covariance estimator on the given
+    feature rows. Single place a covariance/precision estimator gets fit in this
+    codebase -- fit_noise_reference() is just this applied to noise-only rows.
+
+    features: float64 array, shape (n_rows, n_features). Each row is one
+    already-windowed sample -- i.e. already put through logmag + subtract_moving_average
+    (or the streaming equivalent) upstream. This function does no windowing itself.
+    """
+    return LedoitWolf().fit(features)
+
+def fit_noise_reference(noise_features):
+    """Fit a shrinkage-regularized covariance model on baseline noise feature vectors."""
+    return fit_covariance_reference(noise_features)
+
+def mahalanobis_distance(features, noise_reference):
+    """Mahalanobis distance of each row in `features` (same already-windowed representation
+    as noise_features above) from the fitted noise reference."""
+    return np.sqrt(noise_reference.mahalanobis(features))
+
+def pairwise_mahalanobis(a, b, precision):
+    """Mahalanobis distance between two arbitrary feature vectors (e.g. two class
+    centroids, or two file centroids) under a shared covariance metric. Unlike
+    mahalanobis_distance() (distance of rows to a reference's OWN fitted mean), this
+    takes the estimator's `.precision_` directly: sqrt((a-b) @ precision @ (a-b))."""
+    diff = np.asarray(a) - np.asarray(b)
+    return np.sqrt(diff @ precision @ diff)
+
+def rolling_std(arr, window_size=11):
+    """
+    For each row (frequency bin), compute the standard deviation over the past
+    'window_size' time samples (causal). Captures short-term signal variability
+    (e.g. actively flowing liquid perturbing the resonance) as distinct from
+    subtract_moving_average's single-instant deviation from the recent mean.
+    """
+    filtered = []
+    for i in range(window_size, arr.shape[1]):
+        window = arr[:, i-window_size:i]
+        filtered.append(np.std(window, axis=1))
     filtered = np.array(filtered).T
     return filtered
 
